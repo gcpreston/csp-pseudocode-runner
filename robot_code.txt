@@ -1,2 +1,13 @@
-ROTATE_LEFT ()
-MOVE_FORWARD ()
+REPEAT UNTIL ((NOT CAN_MOVE (forward)) AND (NOT CAN_MOVE (left)) AND (NOT CAN_MOVE (right))) {
+	IF CAN_MOVE (forward) {
+		MOVE_FORWARD ()
+	}
+	ELSE {
+		IF CAN_MOVE (right) {
+			ROTATE_RIGHT ()
+		}
+		ELSE {
+			ROTATE_LEFT ()
+		}
+	}
+}

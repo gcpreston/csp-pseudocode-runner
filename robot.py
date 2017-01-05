@@ -53,7 +53,7 @@ def execute(grid, filename="robot_code.txt"):
         "\n"
         "def can_move(direction):\n"
         "    coords = [x + y for x, y in zip(location, moves[direction])]\n"
-        "    if coords[0] < len(grid) and coords[1] < len(grid[1]) and grid[coords[0]][coords[1]] == '.':\n"
+        "    if 0 <= coords[0] < len(grid) and 0 <= coords[1] < len(grid[1]) and grid[coords[0]][coords[1]] == '.':\n"
         "        return True\n"
         "    else:\n"
         "        return False\n"
@@ -66,7 +66,7 @@ def execute(grid, filename="robot_code.txt"):
         "    new = [x + y for x, y in zip(location, moves[facing])]\n"
         "    if can_move(facing):\n"
         "        location = new\n"
-        "        print(location)\n"
+        "        print(location, facing)\n"
         "\n"
         "def rotate_right():\n"
         "    global facing\n"
@@ -74,7 +74,7 @@ def execute(grid, filename="robot_code.txt"):
         "\n"
         "def rotate_left():\n"
         "    global facing\n"
-        "    facing = (facing - 1) % 4"
+        "    facing = (facing - 1) % 4\n"
         "\n"
     )
     
@@ -90,13 +90,15 @@ def execute(grid, filename="robot_code.txt"):
         "CAN_MOVE(right)"    : "can_move((facing + 1) % 4)",
         "MOVE_FORWARD"       : "move_forward",
         "ROTATE_LEFT"        : "rotate_left",
-        "ROATE_RIGHT"        : "rotate_right"
+        "ROTATE_RIGHT"        : "rotate_right"
     }
     
     for _ in range(2):
         for r in replacements:
             code = code.replace(r, replacements[r])
     
+    print(code)
+    print("OUTPUT:")
     exec(code)
 
 def rectangular(lst):
