@@ -43,7 +43,7 @@ def transcode(code):
         code = "import random\n" + code
     
     replacements = {
-        ' = '          : '==',
+        ' = '          : ' == ',
         '<-'           : '=',
         '\n{'          : ':',
         ' {'           : ':',
@@ -52,6 +52,7 @@ def transcode(code):
         " AND "        : " and ",
         " OR "         : " or ",
         "NOT"          : "not",
+        "MOD"          : "%",
         "IF"           : "if",
         "ELSE"         : "else",
         "PROCEDURE"    : "def",
@@ -66,10 +67,10 @@ def transcode(code):
     
     equals_replaced = False
     for r in replacements:
-        if r == ' = ':
-            equals_replaced = True
         if not (r == ' = ' and equals_replaced):
             code = code.replace(r, replacements[r])
+        if r == ' = ':
+            equals_replaced = True
     
     for i in range(len(code)):
         if code[i:i+6] == "REPEAT":
@@ -82,41 +83,59 @@ def transcode(code):
             code = code[:i] + new_line + code[index:]
         
         elif code[i:i+6] == "APPEND":
-            param_open, param_close = find_params(code, i, 6)
-
-            list_name, value = [p.strip() for p in code[i+param_open:i+param_close].split(',')]
-            append_py = f"{list_name}.append({value})"
+            params_s = code[i:]
+            index = params_s.index('\n')
+            params_s = params_s[params_s.index('(')+1:index - 1]
             
-            code = code[:i] + append_py + code[i+param_close+1:]
+            params = find_params(params_s)
+            append_py = f"{params[0]}.append({params[1]})"
+            
+            code = code[:i] + append_py + code[i+index:]   
         
         elif code[i:i+6] == "REMOVE":
-            param_open, param_close = find_params(code, i, 6)
-
-            params = [p.strip() for p in code[i+param_open:i+param_close].split(',')]
+            params_s = code[i:]
+            index = params_s.index('\n')
+            params_s = params_s[params_s.index('(')+1:index - 1]
+            
+            params = find_params(params_s)
             remove_py = f"del {params[0]}[{params[1]}]"
             
-            code = code[:i] + remove_py + code[i+param_close+1:]
+            code = code[:i] + remove_py + code[i+index:]
             
         elif code[i:i+6] == "INSERT":
-            param_open, param_close = find_params(code, i, 6)
-
-            params = [p.strip() for p in code[i+param_open:i+param_close].split(',')]
+            params_s = code[i:]
+            index = params_s.index('\n')
+            params_s = params_s[params_s.index('(')+1:index - 1]
+            
+            params = find_params(params_s)
             insert_py = f"{params[0]}.insert({params[1]}, {params[2]})"
             
-            code = code[:i] + insert_py + code[i+param_close+1:]
+            code = code[:i] + insert_py + code[i+index:]
         
     return code
         
-def find_params(s, i, j):
-    parameter_open = 0
-    while s[i+j-1] != ')':
-        if parameter_open == 0 and s[i+j] == "(":
-            parameter_open = j+1
-        elif s[i+j] == ")":
-            parameter_close = j
-        j += 1
+def find_params(s):
+    params = []
     
-    return [parameter_open, parameter_close]
+    ignore = False
+    i = 0
+    while i < len(s):
+        if s[i] == '(':
+            ignore = True
+        elif s[i] == ')':
+            ignore = False
+            
+        if not ',' in s and len(s) > 0:
+            params.append(s)
+            break
+        
+        if s[i] == ',' and not ignore:
+            params.append(s[:i].strip())
+            s = s[i+1:]
+            i = -1
+        i += 1
+        
+    return params
         
 if __name__ == '__main__':
     main()

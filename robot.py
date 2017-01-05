@@ -18,13 +18,12 @@ def main():
         print("The grid is not rectangular.")
         sys.exit()
         
-    execute(grid)
-    
-# may make different functions for transcoding and executing, or may change pseudocode.py to be like this
-def execute(grid, filename="robot_code.txt"):
-    with open(filename) as file:
+    with open("robot_code.txt") as file:
         code = file.read()
-        
+    
+    exec(transcode(code, grid))
+    
+def transcode(code, grid):
     code = pseudocode.transcode(code)
     
     facing = 4
@@ -97,9 +96,19 @@ def execute(grid, filename="robot_code.txt"):
         for r in replacements:
             code = code.replace(r, replacements[r])
     
-    print(code)
-    print("OUTPUT:")
-    exec(code)
+    code += (
+        "print()\n"
+        "directions = ('^', '>', 'v', '<')\n"
+        "for r in range(len(grid)):\n"
+        "    for c in range(len(grid[0])):\n"
+        "        if [r, c] == location:\n"
+        "            print(directions[facing], end='')\n"
+        "        else:\n"
+        "            print(grid[r][c], end='')\n"
+        "    print()\n"
+    )
+    
+    return code
 
 def rectangular(lst):
     for i in lst:
