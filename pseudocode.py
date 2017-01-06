@@ -1,5 +1,5 @@
 def main():
-    filename = "code.txt"
+    filename = "pseudocode/code.txt"
     try:
         with open(filename) as file:
             code = file.read()

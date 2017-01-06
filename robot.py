@@ -6,7 +6,7 @@ grid = []
 def main():
     global grid
     
-    with open("grid.txt") as file:
+    with open("pseudocode/grid.txt") as file:
         for line in file.readlines():
             current_line = []
             
@@ -18,7 +18,7 @@ def main():
         print("The grid is not rectangular.")
         sys.exit()
         
-    with open("robot_code.txt") as file:
+    with open("pseudocode/robot_code.txt") as file:
         code = file.read()
     
     exec(transcode(code, grid))
