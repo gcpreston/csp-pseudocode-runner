@@ -45,36 +45,36 @@ def transcode(code, grid):
     grid[location[0]][location[1]] = '.'
     
     start_code = (
-        f"grid = {grid}\n"
-        "moves = ((-1, 0), (0, 1), (1, 0), (0, -1))\n"
-        f"facing = {facing}\n"
-        f"location = {location}\n"
+        "class Robot():\n"
         "\n"
-        "def can_move(direction):\n"
-        "    coords = [x + y for x, y in zip(location, moves[direction])]\n"
-        "    if 0 <= coords[0] < len(grid) and 0 <= coords[1] < len(grid[1]) and grid[coords[0]][coords[1]] == '.':\n"
-        "        return True\n"
-        "    else:\n"
-        "        return False\n"
+        "    def __init__(self, grid, location, facing):\n"
+        "        self.grid = grid\n"
+        "        self.location = location\n"
+        "        self.facing = facing\n"
+        "        self.moves = ((-1, 0), (0, 1), (1, 0), (0, -1))\n"
         "\n"
-        "def move_forward():\n"
-        "    global moves\n"
-        "    global facing\n"
-        "    global location\n"
-        "    global can_move\n"
-        "    new = [x + y for x, y in zip(location, moves[facing])]\n"
-        "    if can_move(facing):\n"
-        "        location = new\n"
-        "        print(location, facing)\n"
+        "    def can_move(self, direction):\n"
+        "        coords = [x + y for x, y in zip(self.location, self.moves[direction])]\n"
+        "        if (0 <= coords[0] < len(self.grid) and\n"
+        "            0 <= coords[1] < len(self.grid[1]) and\n"
+        "            self.grid[coords[0]][coords[1]] == '.'):\n"
+        "                return True\n"
+        "        else:\n"
+        "            return False\n"
         "\n"
-        "def rotate_right():\n"
-        "    global facing\n"
-        "    facing = (facing + 1) % 4\n"
+        "    def move_forward(self):\n"
+        "        new = [x + y for x, y in zip(self.location, self.moves[self.facing])]\n"
+        "        if self.can_move(self.facing):\n"
+        "            self.location = new\n"
+        "            print(self.location, self.facing)\n"
         "\n"
-        "def rotate_left():\n"
-        "    global facing\n"
-        "    facing = (facing - 1) % 4\n"
+        "    def rotate_right(self):\n"
+        "        self.facing = (self.facing + 1) % 4\n"
         "\n"
+        "    def rotate_left(self):\n"
+        "        self.facing = (self.facing - 1) % 4\n"
+        "\n"
+        f"robot = Robot({grid}, {location}, {facing})\n"
     )
     
     if code.startswith("import random"):
@@ -84,12 +84,12 @@ def transcode(code, grid):
         
     replacements = {
         "CAN_MOVE ("         : "CAN_MOVE(",
-        "CAN_MOVE(forward)"  : "can_move(facing)",
-        "CAN_MOVE(left)"     : "can_move((facing - 1) % 4)",
-        "CAN_MOVE(right)"    : "can_move((facing + 1) % 4)",
-        "MOVE_FORWARD"       : "move_forward",
-        "ROTATE_LEFT"        : "rotate_left",
-        "ROTATE_RIGHT"        : "rotate_right"
+        "CAN_MOVE(forward)"  : "robot.can_move(robot.facing)",
+        "CAN_MOVE(left)"     : "robot.can_move((robot.facing - 1) % 4)",
+        "CAN_MOVE(right)"    : "robot.can_move((robot.facing + 1) % 4)",
+        "MOVE_FORWARD"       : "robot.move_forward",
+        "ROTATE_LEFT"        : "robot.rotate_left",
+        "ROTATE_RIGHT"       : "robot.rotate_right"
     }
     
     for _ in range(2):
@@ -99,15 +99,16 @@ def transcode(code, grid):
     code += (
         "print()\n"
         "directions = ('^', '>', 'v', '<')\n"
-        "for r in range(len(grid)):\n"
-        "    for c in range(len(grid[0])):\n"
-        "        if [r, c] == location:\n"
-        "            print(directions[facing], end='')\n"
+        "for r in range(len(robot.grid)):\n"
+        "    for c in range(len(robot.grid[0])):\n"
+        "        if [r, c] == robot.location:\n"
+        "            print(directions[robot.facing], end='')\n"
         "        else:\n"
-        "            print(grid[r][c], end='')\n"
+        "            print(robot.grid[r][c], end='')\n"
         "    print()\n"
     )
     
+    print(code)
     return code
 
 def rectangular(lst):
