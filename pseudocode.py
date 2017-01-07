@@ -125,7 +125,8 @@ def find_params(s):
         elif s[i] == ')':
             ignore = False
             
-        if not ',' in s and len(s) > 0:
+        if ((not ',' in s and len(s) > 0) or
+            (i == len(s) - 1 and len(s) > 0)):
             params.append(s)
             break
         
