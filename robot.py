@@ -108,7 +108,6 @@ def transcode(code, grid):
         "    print()\n"
     )
     
-    print(code)
     return code
 
 def rectangular(lst):
