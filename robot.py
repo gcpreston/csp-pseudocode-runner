@@ -74,7 +74,7 @@ def transcode(code, grid):
         "    def rotate_left(self):\n"
         "        self.facing = (self.facing - 1) % 4\n"
         "\n"
-        f"robot = Robot({grid}, {location}, {facing})\n"
+        f"robot = Robot({grid}, {location}, {facing})\n\n"
     )
     
     if code.startswith("import random"):
