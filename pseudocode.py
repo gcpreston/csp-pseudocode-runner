@@ -76,7 +76,7 @@ def transcode(code):
         if code[i:i+6] == "REPEAT":
             line = code[i:]
             index = line.index('\n')
-            times = int(line[:index].split()[1])
+            times = line[:index].split()[1]
             
             new_line = f"for i in range({times}):"
             

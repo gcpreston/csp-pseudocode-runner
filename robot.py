@@ -76,6 +76,8 @@ def transcode(code, grid):
         "\n"
         f"robot = Robot({grid}, {location}, {facing})\n"
         "\n"
+        f"robot = Robot({grid}, {location}, {facing})\n"
+        "\n"
     )
     
     if code.startswith("import random"):
