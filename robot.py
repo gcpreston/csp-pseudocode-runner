@@ -75,6 +75,7 @@ def transcode(code, grid):
         "        self.facing = (self.facing - 1) % 4\n"
         "\n"
         f"robot = Robot({grid}, {location}, {facing})\n"
+        "\n"
     )
     
     if code.startswith("import random"):
@@ -97,7 +98,7 @@ def transcode(code, grid):
             code = code.replace(r, replacements[r])
     
     code += (
-        "print()\n"
+        "\nprint()\n"
         "directions = ('^', '>', 'v', '<')\n"
         "for r in range(len(robot.grid)):\n"
         "    for c in range(len(robot.grid[0])):\n"
@@ -108,7 +109,6 @@ def transcode(code, grid):
         "    print()\n"
     )
     
-    print(code)
     return code
 
 def rectangular(lst):

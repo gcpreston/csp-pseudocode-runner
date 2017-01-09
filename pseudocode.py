@@ -80,7 +80,7 @@ def transcode(code):
             
             new_line = f"for i in range({times}):"
             
-            code = code[:i] + new_line + code[index:]
+            code = code[:i] + new_line + code[i+index:]
         
         elif code[i:i+6] == "APPEND":
             params_s = code[i:]
