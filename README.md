@@ -16,3 +16,5 @@ For robot pseudocode, the grid the robot is on, as well as the default position 
 * Make a version that uses a GUI to initialize the robot's grid configuration
 * Make it possible to specify the pseudocode file locations with command line arguments
 * Bug fixes with evaluating code within statements, for example REPEAT 5 + 3 TIMES
+* Make lists start at index 1
+* Add command line options to change the default data type INPUT () recognizes
