@@ -62,7 +62,8 @@ def transcode(code):
         "REPEAT UNTIL" : "while not",
         " IN "         : " in ",
         "RETURN"       : "return",
-        "INPUT"        : "input",
+        "INPUT("       : "int(input()",
+        "INPUT ("      : "int(input()",
         "LENGTH"       : "len",
         "RANDOM"       : "random.randint"
     }
@@ -114,7 +115,6 @@ def transcode(code):
             
             code = code[:i] + insert_py + code[i+index:]
         
-    print(code)
     return code
         
 def find_params(s):

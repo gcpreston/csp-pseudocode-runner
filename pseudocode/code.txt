@@ -1,36 +1,9 @@
-num <- int(INPUT ())
+num1 <- INPUT ()
+num2 <- INPUT ()
 
-digits <- [0, 0]
-
-REPEAT UNTIL 16 * digits[0] > num {
-	digits[0] <- digits[0] + 1
+IF (num1 > num2) {
+	DISPLAY (num1)
 }
-digits[0] <- digits[0] - 1
-
-digits[1] <- num - (16 * digits[0])
-
-FOR EACH digit IN digits {
-	IF digit < 10 {
-		DISPLAY (digit, end='')
-	}
-	ELSE {
-		IF digit = 10 {
-			DISPLAY ("A", end='')
-		}
-		IF digit = 11 {
-			DISPLAY ("B", end='')
-		}
-		IF digit = 12 {
-			DISPLAY ("C", end='')
-		}
-		IF digit = 13 {
-			DISPLAY ("D", end='')
-		}
-		IF digit = 14 {
-			DISPLAY ("E", end='')
-		}
-		IF digit = 15 {
-			DISPLAY ("F", end='')
-		}
-	}
+ELSE {
+	DISPLAY (num2)
 }
