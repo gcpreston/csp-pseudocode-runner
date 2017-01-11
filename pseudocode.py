@@ -18,7 +18,8 @@ def transcode(code):
     code = code.replace('\t', '')
     
     layers = 0
-    for i in range(len(code)):
+    i = 0
+    while i < len(code):
         if code[i] == '{':
             layers += 1
         elif code[i] == '}':
@@ -28,6 +29,7 @@ def transcode(code):
                 code = code[:i+1] + ('\t' * (layers - 1)) + code[i+1:]
             else:
                 code = code[:i+1] + ('\t' * layers) + code[i+1:]
+        i += 1
           
     # fix odd characters
     # NOTE: greater than and less than symbols must be fixed in the original file
@@ -112,6 +114,7 @@ def transcode(code):
             
             code = code[:i] + insert_py + code[i+index:]
         
+    print(code)
     return code
         
 def find_params(s):
