@@ -1,11 +1,33 @@
+import sys
+import getopt
+
 def main():
+    # by default, set INPUT () to recognize floats
+    # 0 = string, 1 = int, 2 = float
+    input_type = 2
     filename = "pseudocode/code.txt"
+    
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
+    except getopt.GetoptError:
+        sys.exit()
+        
+    for opt, arg in opts:
+        if opt in ("-f", "--file"):
+            filename = arg
+    
+    for arg in args:
+        if arg in ("-i", "--int"):
+            input_type = 1
+        elif arg in ("-s", "--string"):
+            input_type = 0
+        
     try:
         with open(filename) as file:
             code = file.read()
         
         # change code to Python
-        code = transcode(code)
+        code = transcode(code, input_type)
                
         # execute the newly created Python code
         exec(code)
@@ -13,7 +35,7 @@ def main():
     except FileNotFoundError:
         print(filename + " not found.")
         
-def transcode(code):
+def transcode(code, input_type):
     # fix indentation
     code = code.replace('\t', '')
     
@@ -62,11 +84,18 @@ def transcode(code):
         "REPEAT UNTIL" : "while not",
         " IN "         : " in ",
         "RETURN"       : "return",
-        "INPUT("       : "int(input()",
-        "INPUT ("      : "int(input()",
         "LENGTH"       : "len",
         "RANDOM"       : "random.randint"
     }
+    
+    if input_type == 0:
+        replacements["INPUT"] = "input"
+    elif input_type == 1:
+        replacements["INPUT("] = "int(input()"
+        replacements["INPUT ("] = "int(input()"
+    elif input_type == 2:
+        replacements["INPUT("] = "float(input()"
+        replacements["INPUT ("] = "float(input()"
     
     equals_replaced = False
     for r in replacements:

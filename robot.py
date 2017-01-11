@@ -1,4 +1,5 @@
 import sys
+import getopt
 import pseudocode
 
 grid = []
@@ -6,7 +7,27 @@ grid = []
 def main():
     global grid
     
-    with open("pseudocode/grid.txt") as file:
+    # by default, set INPUT () to recognize floats
+    # 0 = string, 1 = int, 2 = float
+    input_type = 2
+    filename = "pseudocode/code.txt"
+    
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
+    except getopt.GetoptError:
+        sys.exit()
+        
+    for opt, arg in opts:
+        if opt in ("-f", "--file"):
+            filename = arg
+    
+    for arg in args:
+        if arg in ("-i", "--int"):
+            input_type = 1
+        elif arg in ("-s", "--string"):
+            input_type = 0
+    
+    with open(filename) as file:
         for line in file.readlines():
             current_line = []
             
@@ -21,10 +42,10 @@ def main():
     with open("pseudocode/robot_code.txt") as file:
         code = file.read()
     
-    exec(transcode(code, grid))
+    exec(transcode(code, input_type, grid))
     
-def transcode(code, grid):
-    code = pseudocode.transcode(code)
+def transcode(code, input_type, grid):
+    code = pseudocode.transcode(code, input_type)
     
     facing = 4
     directions = ('^', '>', 'v', '<')
