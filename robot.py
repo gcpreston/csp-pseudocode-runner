@@ -13,18 +13,16 @@ def main():
     filename = "pseudocode/code.txt"
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
+        opts, _ = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
     except getopt.GetoptError:
         sys.exit()
         
     for opt, arg in opts:
         if opt in ("-f", "--file"):
             filename = arg
-    
-    for arg in args:
-        if arg in ("-i", "--int"):
+        if opt in ("-i", "--int"):
             input_type = 1
-        elif arg in ("-s", "--string"):
+        if opt in ("-s", "--string"):
             input_type = 0
     
     with open(filename) as file:
