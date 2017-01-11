@@ -10,7 +10,7 @@ def main():
     # by default, set INPUT () to recognize floats
     # 0 = string, 1 = int, 2 = float
     input_type = 2
-    filename = "pseudocode/code.txt"
+    filename = "pseudocode/robot_code.txt"
     
     try:
         opts, _ = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
