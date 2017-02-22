@@ -10,22 +10,25 @@ def main():
     # by default, set INPUT () to recognize floats
     # 0 = string, 1 = int, 2 = float
     input_type = 2
-    filename = "pseudocode/robot_code.txt"
+    code_filename = "pseudocode/robot_code.txt"
+    grid_filename = "pseudocode/grid.txt"
     
     try:
-        opts, _ = getopt.getopt(sys.argv[1:], "f:is", ["file=", "int", "string"])
+        opts, _ = getopt.getopt(sys.argv[1:], "c:g:is", ["file=", "grid=", "int", "string"])
     except getopt.GetoptError:
         sys.exit()
         
     for opt, arg in opts:
-        if opt in ("-f", "--file"):
-            filename = arg
+        if opt in ("-c", "--code"):
+            code_filename = arg
+        if opt in ("-g", "--grid"):
+            grid_filename = arg
         if opt in ("-i", "--int"):
             input_type = 1
         if opt in ("-s", "--string"):
             input_type = 0
     
-    with open(filename) as file:
+    with open(grid_filename) as file:
         for line in file.readlines():
             current_line = []
             
@@ -37,7 +40,7 @@ def main():
         print("The grid is not rectangular.")
         sys.exit()
         
-    with open("pseudocode/robot_code.txt") as file:
+    with open(code_filename) as file:
         code = file.read()
     
     exec(transcode(code, input_type, grid))
@@ -95,8 +98,6 @@ def transcode(code, input_type, grid):
         "\n"
         f"robot = Robot({grid}, {location}, {facing})\n"
         "\n"
-        f"robot = Robot({grid}, {location}, {facing})\n"
-        "\n"
     )
     
     if code.startswith("import random"):
@@ -129,7 +130,7 @@ def transcode(code, input_type, grid):
         "            print(robot.grid[r][c], end='')\n"
         "    print()\n"
     )
-    
+    print(code)
     return code
 
 def rectangular(lst):

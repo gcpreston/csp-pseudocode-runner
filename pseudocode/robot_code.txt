@@ -1,9 +1,15 @@
-REPEAT RANDOM(1,4) TIMES {
-	MOVE_FORWARD ()
-}
-
-ROTATE_RIGHT ()
-
-REPEAT RANDOM(1,4) TIMES {
-	MOVE_FORWARD ()
+REPEAT UNTIL (NOT CAN_MOVE (forward) AND NOT CAN_MOVE (left) AND NOT CAN_MOVE (right)) {
+	IF (CAN_MOVE (forward)) {
+		MOVE_FORWARD ()
+	}
+	ELSE {
+		IF (CAN_MOVE (left)) {
+			ROTATE_LEFT ()
+			MOVE_FORWARD ()
+		}
+		ELSE {
+			ROTATE_RIGHT ()
+			MOVE_FORWARD ()
+		}
+	}
 }

@@ -26,7 +26,7 @@ def main():
         
         # change code to Python
         code = transcode(code, input_type)
-               
+        
         # execute the newly created Python code
         exec(code)
         
