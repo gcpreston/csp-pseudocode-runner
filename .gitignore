@@ -91,4 +91,7 @@ ENV/
 # Eclipse/PyDev project settings
 .project
 .pydevproject
+
+# Pseudocode examples
+pseudocode/*
 .settings/
