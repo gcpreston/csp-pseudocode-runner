@@ -1,8 +1,20 @@
 import sys
 import getopt
 
+
 def main():
-    # by default, set INPUT () to recognize floats
+    '''
+    This function iterates through a properly formatted
+    pseudocode text file and returns (roughly) equivalent
+    python code.
+
+    TODO:
+    The main() function probably shouldn't be used for
+    anything other than opening the file and calling
+    a different function to parse through everything.
+    '''
+
+    ### Input Types ###
     # 0 = string, 1 = int, 2 = float
     input_type = 2
     filename = "pseudocode/code.txt"
@@ -32,11 +44,13 @@ def main():
         
     except FileNotFoundError:
         print(filename + " not found.")
-        
+
+
 def transcode(code, input_type):
-    # fix indentation
+    # Removes all tabbed indentation
     code = code.replace('\t', '')
     
+    # Tracks where the parser is in terms of layered stuff
     layers = 0
     i = 0
     while i < len(code):
@@ -51,19 +65,22 @@ def transcode(code, input_type):
                 code = code[:i+1] + ('\t' * layers) + code[i+1:]
         i += 1
           
-    # fix odd characters
-    # NOTE: greater than and less than symbols must be fixed in the original file
-    # greater than: >=, less than: <=
+    # Replaces characters ≥, ≤, ≠, ← with things that python can recognize
     for i in range(len(code)):
         if ord(code[i]) == 8592:
-            code = code[:i] + '<-' + code[i+1:]
+            code = code[:i] + '<-' + code[i + 1:]
         elif ord(code[i]) == 8800:
-            code = code[:i] + '!=' + code[i+1:]
+            code = code[:i] + '!=' + code[i + 1:]
+        elif ord(code[i]) == 8805:
+            code = code[:i] + '>=' + code[i + 1:]
+        elif ord(code[i]) == 8804:
+            code = code[:i] + '<=' + code[i + 1:]
             
-    # change syntax
+    # Imports random if random is used
     if "RANDOM" in code:
         code = "import random\n" + code
     
+    # Dict of pseudocode keywords/syntax and their python equivalents
     replacements = {
         ' = '          : ' == ',
         '<-'           : '=',
@@ -86,6 +103,8 @@ def transcode(code, input_type):
         "RANDOM"       : "random.randint"
     }
     
+    # Adds proper implementation for input() based on
+    # the input type specified in the command line 
     if input_type == 0:
         replacements["INPUT"] = "input"
     elif input_type == 1:
@@ -95,6 +114,7 @@ def transcode(code, input_type):
         replacements["INPUT("] = "float(input()"
         replacements["INPUT ("] = "float(input()"
     
+    # Replaces everything in the pseudocode with python equivalents
     equals_replaced = False
     for r in replacements:
         if not (r == ' = ' and equals_replaced):
@@ -102,6 +122,7 @@ def transcode(code, input_type):
         if r == ' = ':
             equals_replaced = True
     
+    # Selects all cases of things with parameters and treats them appropiately
     for i in range(len(code)):
         if code[i:i+6] == "REPEAT":
             line = code[i:]
@@ -143,8 +164,13 @@ def transcode(code, input_type):
             code = code[:i] + insert_py + code[i+index:]
         
     return code
-        
+
+      
 def find_params(s):
+    '''
+    Takes a section of pseudocode that is being passed to something as
+    a parameter or set of parameters and parses them out individually
+    '''
     params = []
     
     ignore = False
@@ -167,6 +193,7 @@ def find_params(s):
         i += 1
         
     return params
-        
+
+      
 if __name__ == '__main__':
     main()
